@@ -1,0 +1,563 @@
+<!DOCTYPE html>
+<html lang="pt-BR" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>WorkSync - A Gestão de DP e RH Unificada</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #F7F8FC;
+            color: #1A202C;
+        }
+        .chart-container {
+            position: relative;
+            width: 100%;
+            max-width: 400px;
+            margin-left: auto;
+            margin-right: auto;
+            height: 400px;
+            max-height: 80vh;
+        }
+        .nav-link {
+            transition: color 0.3s ease;
+        }
+        .nav-link.active {
+            color: #3B82F6;
+            font-weight: 600;
+        }
+        .section-title {
+            font-size: 2.25rem;
+            font-weight: 700;
+            line-height: 2.5rem;
+        }
+        .section-subtitle {
+            font-size: 1.125rem;
+            line-height: 1.75rem;
+            color: #4A5568;
+        }
+        .card {
+            background-color: white;
+            border-radius: 0.75rem;
+            box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
+        }
+        .spinner {
+            border: 4px solid rgba(0, 0, 0, 0.1);
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            border-left-color: #3B82F6;
+            animation: spin 1s ease infinite;
+            margin-right: 8px;
+        }
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+    </style>
+</head>
+<body class="antialiased">
+
+    <header id="main-header" class="bg-white/80 backdrop-blur-lg fixed top-0 left-0 right-0 z-50 shadow-md">
+        <div class="container mx-auto px-6 py-3 flex flex-col md:flex-row justify-between items-center">
+            <!-- A logo do WorkSync foi removida conforme sua solicitação -->
+            <nav class="flex-grow flex justify-center space-x-2 md:space-x-4 text-xs md:text-sm">
+                <a href="#problema" class="nav-link text-gray-600 hover:text-blue-500" data-section="problema">O Problema</a>
+                <a href="#solucao" class="nav-link text-gray-600 hover:text-blue-500" data-section="solucao">A Solução</a>
+                <a href="#diferenciais" class="nav-link text-gray-600 hover:text-blue-500" data-section="diferenciais">Diferenciais</a>
+                <a href="#conformidade" class="nav-link text-gray-600 hover:text-blue-500" data-section="conformidade">Inteligência & IA</a>
+                <a href="#negocios" class="nav-link text-gray-600 hover:text-blue-500" data-section="negocios">Negócios</a>
+                <a href="#mercado" class="nav-link text-gray-600 hover:text-blue-500" data-section="mercado">Mercado</a>
+                <a href="#estrategia" class="nav-link text-gray-600 hover:text-blue-500" data-section="estrategia">Estratégia</a>
+                <a href="#lideranca" class="nav-link text-gray-600 hover:text-blue-500" data-section="lideranca">Liderança</a>
+            </nav>
+            <a href="#contato" class="mt-2 md:mt-0 bg-blue-500 text-white font-semibold px-5 py-2 rounded-lg hover:bg-blue-600 transition-colors">Contato</a>
+        </div>
+    </header>
+
+    <main>
+        <section id="home" class="min-h-screen flex items-center bg-white pt-24 md:pt-0">
+            <div class="container mx-auto px-6 text-center">
+                <h1 class="text-4xl md:text-6xl font-bold text-gray-800 leading-tight">
+                    WorkSync: A Gestão de DP e RH Unificada
+                </h1>
+                <div id="intro-text" class="mt-4 text-lg md:text-xl text-gray-600 max-w-3xl mx-auto space-y-4 hidden">
+                    <p>WorkSync: A Gestão de DP e RH Unificada aborda um desafio crítico para empresas de médio e grande porte: a ineficiência, o alto custo operacional e os riscos trabalhistas decorrentes da gestão fragmentada de ponto e RH. Nossa solução, WorkSync, é uma plataforma SaaS all-in-one que revoluciona essa dinâmica, oferecendo Automação para o Gestor e Transparência para o Colaborador ao integrar nativamente controle de ponto, folha de pagamento e comunicação em um sistema intuitivo. Com WorkSync, empresas podem finalmente superar a burocracia e focar em seu crescimento estratégico.</p>
+                    <p>Para os gestores, WorkSync garante controle e precisão inigualáveis, com gerenciamento de adicionais por regras flexíveis e automação completa do fechamento da folha, complementado por relatórios avançados para tomada de decisão estratégica e comunicação direta através de alertas segmentados. Já para o colaborador, a plataforma assegura transparência total com acesso à previsão do salário líquido e holerites digitais, além de autonomia real para gerenciar seu ponto e solicitações sem depender do RH, promovendo confiança e segurança sobre seus ganhos e descontos.</p>
+                    <p>Nosso maior diferencial competitivo reside na abordagem nativa e unificada de WorkSync, que integra ponto e folha de pagamento de forma coesa, ao contrário de soluções concorrentes que muitas vezes separam esses módulos. Isso nos permite oferecer cálculos flexíveis de adicionais e gestão de vales integrada, simplificando processos. O ponto de virada, contudo, é a nossa IA inovadora, que atua como um "guru jurídico": ela identifica e alerta proativamente sobre riscos trabalhistas, além de oferecer consultas inteligentes baseadas na CLT. Essa funcionalidade não só reduz custos operacionais, mas mitiga significativamente os riscos legais para as empresas, posicionando WorkSync como uma solução indispensável e de valor superior no mercado.</p>
+                </div>
+                <a id="discover-btn" href="javascript:void(0)" class="mt-8 inline-block bg-blue-500 text-white font-bold text-lg px-8 py-4 rounded-lg hover:bg-blue-600 transition-transform transform hover:scale-105">
+                    Descubra a Oportunidade
+                </a>
+            </div>
+        </section>
+
+        <section id="problema" class="py-20">
+            <div class="container mx-auto px-6 text-center">
+                <h2 class="section-title">O Caos da Gestão de DP</h2>
+                <p class="section-subtitle mt-4 max-w-3xl mx-auto">
+                    A ineficiência e os riscos trabalhistas custam caro. O WorkSync é a solução para a fragmentação de processos e a complexidade manual que dominam os departamentos de RH e DP.
+                </p>
+                <div class="mt-12 grid md:grid-cols-3 gap-8">
+                    <div class="card p-8">
+                        <div class="text-blue-500 text-4xl font-bold">📄</div>
+                        <h3 class="text-xl font-semibold mt-4">Processos Fragmentados</h3>
+                        <p class="mt-2 text-gray-600">Múltiplos sistemas para ponto, folha e comunicação geram erros e retrabalho.</p>
+                    </div>
+                    <div class="card p-8">
+                        <div class="text-blue-500 text-4xl font-bold">⏳</div>
+                        <h3 class="text-xl font-semibold mt-4">Alto Custo Operacional</h3>
+                        <p class="mt-2 text-gray-600">Horas do time de DP são gastas em tarefas manuais e repetitivas que poderiam ser automatizadas.</p>
+                    </div>
+                    <div class="card p-8">
+                        <div class="text-blue-500 text-4xl font-bold">⚖️</div>
+                        <h3 class="text-xl font-semibold mt-4">Riscos Trabalhistas</h3>
+                        <p class="mt-2 text-gray-600">Cálculos incorretos de adicionais e horas extras podem levar a multas e processos judiciais.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="solucao" class="py-20 bg-white">
+            <div class="container mx-auto px-6 text-center">
+                <h2 class="section-title">Uma Única Plataforma para Tudo</h2>
+                <p class="section-subtitle mt-4 max-w-3xl mx-auto">
+                    O WorkSync integra ponto, folha de pagamento e comunicação em um só lugar, transformando tarefas complexas em processos simples e automatizados.
+                </p>
+                <div class="mt-12 max-w-4xl mx-auto">
+                    <div class="relative p-8 border-2 border-dashed border-gray-300 rounded-xl">
+                        <div class="grid grid-cols-1 md:grid-cols-3 gap-8 text-center">
+                            <div class="p-4 rounded-lg">
+                                <h3 class="text-lg font-semibold">🕒 Controle de Ponto</h3>
+                                <p class="text-sm text-gray-600">Registro seguro e em conformidade com a lei.</p>
+                            </div>
+                            <div class="p-4 rounded-lg mt-32 md:mt-0">
+                                <h3 class="text-lg font-semibold">💰 Folha de Pagamento</h3>
+                                <p class="text-sm text-gray-600">Cálculos automáticos e geração de holerites.</p>
+                            </div>
+                             <div class="p-4 rounded-lg">
+                                <h3 class="text-lg font-semibold">💬 Comunicação</h3>
+                                <p class="text-sm text-gray-600">Alertas, enquetes e engajamento da equipe.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        
+        <section id="diferenciais" class="py-20">
+            <div class="container mx-auto px-6">
+                <div class="text-center mb-12">
+                     <h2 class="section-title">Diferenciais para Todos</h2>
+                     <p class="section-subtitle mt-4 max-w-3xl mx-auto">
+                        Criamos uma experiência que beneficia tanto quem gerencia quanto quem executa.
+                    </p>
+                </div>
+                <div class="grid md:grid-cols-2 gap-10">
+                    <div class="bg-white p-8 rounded-xl shadow-lg">
+                        <h3 class="text-2xl font-bold text-center mb-6">Para o Gestor</h3>
+                        <ul class="space-y-4">
+                            <li class="flex items-start">
+                                <span class="text-green-500 mr-3 mt-1">✓</span>
+                                <div><strong class="font-semibold">Controle e Precisão:</strong> Gerencie adicionais com regras flexíveis por setor e automatize o fechamento da folha.</div>
+                            </li>
+                            <li class="flex items-start">
+                                <span class="text-green-500 mr-3 mt-1">✓</span>
+                                <div><strong class="font-semibold">Visão 360°:</strong> Relatórios avançados para tomada de decisão estratégica sobre custos e produtividade.</div>
+                            </li>
+                            <li class="flex items-start">
+                                <span class="text-green-500 mr-3 mt-1">✓</span>
+                                <div><strong class="font-semibold">Comunicação Direta:</strong> Envie alertas e enquetes para engajar e informar a equipe de forma segmentada.</div>
+                            </li>
+                        </ul>
+                    </div>
+                    <div class="bg-white p-8 rounded-xl shadow-lg">
+                        <h3 class="text-2xl font-bold text-center mb-6">Para o Colaborador</h3>
+                         <ul class="space-y-4">
+                            <li class="flex items-start">
+                                <span class="text-green-500 mr-3 mt-1">✓</span>
+                                <div><strong class="font-semibold">Transparência Total:</strong> Acesse a previsão do salário líquido e holerites a qualquer momento pelo app.</div>
+                            </li>
+                            <li class="flex items-start">
+                                <span class="text-green-500 mr-3 mt-1">✓</span>
+                                <div><strong class="font-semibold">Autonomia Real:</strong> Gerencie seu ponto, solicite correções e cadastre sua biometria sem depender do RH.</div>
+                            </li>
+                            <li class="flex items-start">
+                                <span class="text-green-500 mr-3 mt-1">✓</span>
+                                <div><strong class="font-semibold">Confiança e Segurança:</strong> Tenha clareza sobre seus ganhos e descontos, fortalecendo a relação com a empresa.</div>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="conformidade" class="py-20 bg-white">
+            <div class="container mx-auto px-6">
+                 <div class="text-center mb-12">
+                    <h2 class="section-title">Inteligência & Conformidade com IA</h2>
+                    <p class="section-subtitle mt-4 max-w-3xl mx-auto">
+                        Nosso maior diferencial: uma IA que atua como consultora jurídica, garantindo a conformidade e prevenindo riscos trabalhistas.
+                    </p>
+                </div>
+                <div class="grid md:grid-cols-2 gap-10 max-w-4xl mx-auto">
+                     <div class="bg-gray-100 p-8 rounded-xl shadow-inner">
+                        <h3 class="text-xl font-bold mb-4 flex items-center">
+                            <span class="mr-3 text-2xl">🚨</span> Análise Preditiva de Riscos
+                        </h3>
+                        <p class="text-gray-700">A IA monitora padrões de ponto dos funcionários, identificando automaticamente jornadas que possam infringir a CLT, como excesso de horas extras ou viradas de horário sem o devido descanso. O administrador recebe alertas proativos para tomar medidas imediatas e evitar passivos trabalhistas futuros.</p>
+                    </div>
+                    <!-- Nova funcionalidade: Guru Jurídico Interativo -->
+                    <div class="bg-gray-100 p-8 rounded-xl shadow-inner">
+                        <h3 class="text-xl font-bold mb-4 flex items-center">
+                            <span class="mr-3 text-2xl">🧠</span> Guru Jurídico Trabalhista ✨
+                        </h3>
+                        <p class="text-gray-700">A IA, treinada com as regras da CLT e legislações complementares, funciona como um assistente jurídico especializado. O administrador pode fazer perguntas sobre situações específicas de RH e DP, recebendo orientações claras e baseadas na legislação para não ter dúvidas sobre a tomada de decisões.</p>
+                        <div class="mt-6">
+                             <textarea id="clt-query" class="w-full p-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-500 focus:border-blue-500" placeholder="Faça uma pergunta sobre a CLT..." rows="3"></textarea>
+                             <button id="ask-clt-btn" class="mt-4 w-full bg-blue-500 text-white font-bold py-3 rounded-lg hover:bg-blue-600 transition-colors">
+                                 Perguntar ao Guru Jurídico
+                             </button>
+                             <div id="clt-response-container" class="mt-4 p-4 bg-white rounded-lg shadow-sm text-gray-700">
+                                 <!-- Resposta da IA será exibida aqui -->
+                             </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="negocios" class="py-20">
+            <div class="container mx-auto px-6">
+                <div class="text-center mb-12">
+                    <h2 class="section-title">Modelo de Negócios e Crescimento</h2>
+                    <p class="section-subtitle mt-4 max-w-3xl mx-auto">
+                        Nossa estratégia de entrada e crescimento abrange diferentes segmentos de mercado para garantir a capilaridade da plataforma.
+                    </p>
+                </div>
+                <div class="grid md:grid-cols-3 gap-10 max-w-6xl mx-auto">
+                     <div class="bg-white p-8 rounded-xl shadow-lg">
+                        <h3 class="text-2xl font-bold mb-4 flex items-center">
+                            <span class="mr-3 text-3xl text-green-500">📈</span> Pequenas Empresas (SaaS)
+                        </h3>
+                        <p class="text-gray-700">Oferecemos planos de ponto simples e acessíveis, a partir de R$ 29,90/mês, distribuídos via Play Store e App Store. Esta abordagem gera um crescimento orgânico e de baixo custo, construindo uma base de usuários sólida.</p>
+                    </div>
+                    <div class="bg-white p-8 rounded-xl shadow-lg">
+                        <h3 class="text-2xl font-bold mb-4 flex items-center">
+                            <span class="mr-3 text-3xl text-blue-500">🤝</span> Grandes Corporações (Enterprise)
+                        </h3>
+                        <p class="text-gray-700">Para empresas maiores, a estratégia é de vendas diretas e parcerias estratégicas com escritórios de contabilidade. Com alto número de funcionários, o preço por usuário pode chegar a R$ 3,00, com um preço médio esperado de R$ 15,00 por usuário quando a plataforma atingir 1 milhão de usuários.</p>
+                    </div>
+                    <div class="bg-white p-8 rounded-xl shadow-lg">
+                        <h3 class="text-2xl font-bold mb-4 flex items-center">
+                            <span class="mr-3 text-3xl text-purple-500">⚙️</span> Futuro: Hardware Embarcado
+                        </h3>
+                        <p class="text-gray-700">No futuro, expandiremos a oferta para a venda de quiosques de ponto embarcados, que já virão com o sistema WorkSync instalado e câmeras para reconhecimento facial e captura de ponto. Esta vertical de negócios permitirá uma integração física direta e uma nova fonte de receita.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="mercado" class="py-20 bg-white">
+            <div class="container mx-auto px-6">
+                <div class="text-center mb-12">
+                    <h2 class="section-title">O Mercado de HR Tech no Brasil</h2>
+                    <p class="section-subtitle mt-4 max-w-3xl mx-auto">
+                        Com base em dados de empresas registradas no Brasil, identificamos um mercado de milhões de empresas sedentas por soluções de gestão.
+                    </p>
+                </div>
+                <div class="mt-8 max-w-4xl mx-auto">
+                    <p class="text-lg text-center font-semibold mb-4">
+                        Com cerca de <strong class="text-blue-500">23,9 milhões de empresas ativas</strong> no Brasil, o nosso mercado endereçável é vasto.
+                    </p>
+                    <p class="text-lg text-center text-gray-700">
+                        Projetando uma penetração de <strong class="text-blue-500">apenas 2%</strong>, com empresas de um porte médio de <strong>30 funcionários</strong> e um custo de <strong>R$ 3,00 por usuário</strong>, estimamos um potencial de receita anual de
+                    </p>
+                    <p class="text-4xl md:text-5xl font-bold text-center text-blue-500 mt-4">
+                        R$ 516.240.000,00
+                    </p>
+                </div>
+                <div class="chart-container mt-12">
+                    <canvas id="marketChart"></canvas>
+                </div>
+                 <p class="text-center mt-4 text-sm text-gray-500">
+                    Distribuição atual do mercado de soluções de RH no Brasil (estimativa).
+                </p>
+            </div>
+        </section>
+        
+        <section id="estrategia" class="py-20">
+            <div class="container mx-auto px-6">
+                <div class="text-center mb-12">
+                    <h2 class="section-title">Estratégia de Conquista: Empresas sem Solução</h2>
+                    <p class="section-subtitle mt-4 max-w-3xl mx-auto">
+                        Aproximadamente 45% das empresas no Brasil, ou <strong>10,75 milhões</strong>, ainda operam sem uma solução digital integrada. Para conquistar este mercado, nossa estratégia é:
+                    </p>
+                </div>
+                <div class="grid md:grid-cols-2 gap-10 max-w-4xl mx-auto">
+                    <div class="bg-white p-8 rounded-xl shadow-lg">
+                        <h3 class="text-2xl font-bold mb-4 flex items-center">
+                            <span class="mr-3 text-3xl text-purple-500">🚀</span> Entrada de Baixo Custo
+                        </h3>
+                        <p class="text-gray-700">Nossa versão inicial foca em um produto de ponto digital acessível, com preços competitivos para pequenas e médias empresas. Isso facilita a adoção e a transição do método manual para o digital sem um alto investimento inicial.</p>
+                    </div>
+                    <div class="bg-white p-8 rounded-xl shadow-lg">
+                        <h3 class="text-2xl font-bold mb-4 flex items-center">
+                            <span class="mr-3 text-3xl text-orange-500">💡</span> Educação e Simplificação
+                        </h3>
+                        <p class="text-gray-700">Criaremos conteúdo educativo e demonstrações simples para mostrar como a plataforma WorkSync resolve problemas reais, como o cálculo manual de horas extras, a gestão de folgas e o risco de ações trabalhistas, tornando a solução de DP e RH menos complexa e mais segura.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="lideranca" class="py-20 bg-white">
+            <div class="container mx-auto px-6">
+                 <div class="text-center mb-12">
+                    <h2 class="section-title">Nossa Vantagem Competitiva</h2>
+                    <p class="section-subtitle mt-4 max-w-3xl mx-auto">
+                        WorkSync não é apenas um software de ponto. Somos uma solução all-in-one que resolve a fragmentação do DP, oferecendo flexibilidade e automação incomparáveis, além de uma camada de inteligência artificial exclusiva.
+                    </p>
+                </div>
+                <div class="max-w-4xl mx-auto overflow-x-auto">
+                    <table class="w-full text-left border-collapse">
+                        <thead>
+                            <tr>
+                                <th class="py-4 px-6 bg-gray-100 font-bold uppercase text-sm text-gray-600 border-b">Funcionalidade</th>
+                                <th class="py-4 px-6 bg-blue-100 font-bold uppercase text-sm text-blue-800 border-b text-center">WorkSync</th>
+                                <th class="py-4 px-6 bg-gray-100 font-bold uppercase text-sm text-gray-600 border-b text-center">Concorrentes</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr class="hover:bg-gray-50">
+                                <td class="py-4 px-6 border-b border-gray-200">Controle de Ponto Completo</td>
+                                <td class="py-4 px-6 border-b border-gray-200 text-center text-green-500 text-2xl">✓</td>
+                                <td class="py-4 px-6 border-b border-gray-200 text-center text-green-500 text-2xl">✓</td>
+                            </tr>
+                            <tr class="hover:bg-gray-50">
+                                <td class="py-4 px-6 border-b border-gray-200">Geração de Holerites Nativa</td>
+                                <td class="py-4 px-6 border-b border-gray-200 text-center text-green-500 text-2xl">✓</td>
+                                <td class="py-4 px-6 border-b border-gray-200 text-center text-red-500 text-2xl">✗</td>
+                            </tr>
+                            <tr class="hover:bg-gray-50">
+                                <td class="py-4 px-6 border-b border-gray-200">Cálculos Flexíveis de Adicionais</td>
+                                <td class="py-4 px-6 border-b border-gray-200 text-center text-green-500 text-2xl">✓</td>
+                                <td class="py-4 px-6 border-b border-gray-200 text-center text-red-500 text-2xl">✗</td>
+                            </tr>
+                             <tr class="hover:bg-gray-50">
+                                <td class="py-4 px-6 border-b border-gray-200">Gestão de Vales Integrada</td>
+                                <td class="py-4 px-6 border-b border-gray-200 text-center text-green-500 text-2xl">✓</td>
+                                <td class="py-4 px-6 border-b border-gray-200 text-center text-red-500 text-2xl">✗</td>
+                            </tr>
+                            <tr class="hover:bg-gray-50">
+                                <td class="py-4 px-6 border-b border-gray-200">Plataforma de Comunicação</td>
+                                <td class="py-4 px-6 border-b border-gray-200 text-center text-green-500 text-2xl">✓</td>
+                                <td class="py-4 px-6 border-b border-gray-200 text-center text-gray-400 text-xl">Parcial</td>
+                            </tr>
+                            <tr class="hover:bg-gray-50">
+                                <td class="py-4 px-6 border-b border-gray-200">Análise Preditiva de Riscos Trabalhistas (IA)</td>
+                                <td class="py-4 px-6 border-b border-gray-200 text-center text-green-500 text-2xl">✓</td>
+                                <td class="py-4 px-6 border-b border-gray-200 text-center text-red-500 text-2xl">✗</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </section>
+
+        <footer id="contato" class="bg-gray-800 text-white py-16">
+            <div class="container mx-auto px-6 text-center">
+                <h2 class="text-3xl font-bold">WorkSync: O Futuro da Gestão de Pessoas.</h2>
+                <p class="mt-4 max-w-2xl mx-auto">
+                    Conectando a gestão à eficiência, a autonomia à confiança e o RH ao futuro.
+                    Vamos conversar sobre como podemos impulsionar o seu negócio.
+                </p>
+            </div>
+        </footer>
+    </main>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            // Função para exibir um estado de carregamento
+            function showLoading(element) {
+                element.innerHTML = '<div class="flex items-center justify-center"><div class="spinner"></div><span class="text-gray-500 ml-2">Gerando...</span></div>';
+            }
+
+            // Função para esconder o estado de carregamento e exibir o texto
+            function hideLoading(element, text) {
+                element.innerHTML = `<p class="text-gray-700">${text}</p>`;
+            }
+
+            // Função genérica para chamar a API do Gemini com tratamento de erro e backoff
+            async function callGeminiAPI(prompt, outputElement) {
+                showLoading(outputElement);
+                
+                let chatHistory = [];
+                chatHistory.push({ role: "user", parts: [{ text: prompt }] });
+                const payload = { contents: chatHistory };
+                const apiKey = "";
+                const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-05-20:generateContent?key=${apiKey}`;
+                
+                let response;
+                let retries = 0;
+                const maxRetries = 5;
+                const baseDelay = 1000; // 1 segundo
+
+                while (retries < maxRetries) {
+                    try {
+                        response = await fetch(apiUrl, {
+                            method: 'POST',
+                            headers: { 'Content-Type': 'application/json' },
+                            body: JSON.stringify(payload)
+                        });
+
+                        if (response.ok) {
+                             const result = await response.json();
+                             if (result.candidates && result.candidates.length > 0 && result.candidates[0].content.parts.length > 0) {
+                                 const text = result.candidates[0].content.parts[0].text;
+                                 hideLoading(outputElement, text);
+                                 return; // Sucesso, sai da função
+                             } else {
+                                 console.error("Resposta da API em formato inesperado:", result);
+                                 hideLoading(outputElement, "Ocorreu um erro ao gerar a resposta. Formato da API inesperado.");
+                                 return;
+                             }
+                        } else if (response.status === 429) {
+                            // Erro de 'Too Many Requests', tenta novamente com backoff
+                            retries++;
+                            const delay = baseDelay * Math.pow(2, retries);
+                            console.warn(`Erro 429: Tentando novamente em ${delay}ms...`);
+                            await new Promise(resolve => setTimeout(resolve, delay));
+                        } else {
+                            // Outros erros, não tenta novamente
+                            console.error("Erro na resposta da API:", response.status, response.statusText);
+                            hideLoading(outputElement, `Ocorreu um erro: ${response.status} ${response.statusText}`);
+                            return;
+                        }
+
+                    } catch (error) {
+                        console.error("Erro na chamada da API:", error);
+                        hideLoading(outputElement, "Ocorreu um erro na conexão. Por favor, tente novamente.");
+                        return; // Erro de rede, sai da função
+                    }
+                }
+
+                // Se chegou aqui, as tentativas acabaram
+                hideLoading(outputElement, "Não foi possível conectar à API após várias tentativas. Por favor, tente novamente mais tarde.");
+            }
+            
+            // Lógica para o botão "Perguntar ao Guru Jurídico"
+            document.getElementById('ask-clt-btn').addEventListener('click', () => {
+                const query = document.getElementById('clt-query').value;
+                const outputDiv = document.getElementById('clt-response-container');
+
+                if (query.trim() === '') {
+                    outputDiv.innerHTML = '<p class="text-red-500">Por favor, digite sua pergunta.</p>';
+                    return;
+                }
+
+                const prompt = `Você é um assistente jurídico especializado em direito trabalhista brasileiro (CLT). Responda à seguinte pergunta de forma clara, concisa e baseada na lei. Se a pergunta for fora da sua área, informe educadamente que não pode responder. Pergunta: "${query}"`;
+                
+                callGeminiAPI(prompt, outputDiv);
+            });
+
+
+            // Lógica para mostrar o texto na seção inicial ao clicar no botão
+            const discoverBtn = document.getElementById('discover-btn');
+            const introText = document.getElementById('intro-text');
+            discoverBtn.addEventListener('click', (e) => {
+                e.preventDefault();
+                introText.classList.remove('hidden');
+                introText.scrollIntoView({ behavior: 'smooth' });
+                discoverBtn.style.display = 'none'; // Esconde o botão após o clique
+            });
+
+            const ctx = document.getElementById('marketChart').getContext('2d');
+            new Chart(ctx, {
+                type: 'doughnut',
+                data: {
+                    labels: ['Empresas sem Solução Integrada', 'Soluções de Ponto Básicas', 'ERPs Tradicionais', 'Oportunidade WorkSync'],
+                    datasets: [{
+                        label: 'Distribuição de Mercado',
+                        data: [10755000, 5975000, 4780000, 2390000],
+                        backgroundColor: [
+                            '#E5E7EB',
+                            '#93C5FD',
+                            '#60A5FA',
+                            '#3B82F6'
+                        ],
+                        borderColor: '#F7F8FC',
+                        borderWidth: 4
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            position: 'bottom',
+                            labels: {
+                                padding: 20,
+                                font: {
+                                    size: 14,
+                                    family: 'Inter'
+                                }
+                            }
+                        },
+                        tooltip: {
+                            callbacks: {
+                                label: function(context) {
+                                    const total = context.dataset.data.reduce((acc, current) => acc + current, 0);
+                                    const value = context.parsed;
+                                    const percentage = ((value / total) * 100).toFixed(2);
+                                    let label = context.label || '';
+                                    if (label) {
+                                        label += ': ';
+                                    }
+                                    return `${label} ${value.toLocaleString('pt-BR')} (${percentage}%)`;
+                                }
+                            }
+                        }
+                    }
+                }
+            });
+
+            const sections = document.querySelectorAll('section');
+            const navLinks = document.querySelectorAll('.nav-link');
+
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        navLinks.forEach(link => {
+                            link.classList.toggle('active', link.getAttribute('href').substring(1) === entry.target.id);
+                        });
+                    }
+                });
+            }, { threshold: 0.5 });
+
+            sections.forEach(section => {
+                observer.observe(section);
+            });
+
+            document.querySelectorAll('#main-header a[href^="#"]').forEach(anchor => {
+                anchor.addEventListener('click', function (e) {
+                    e.preventDefault();
+                    document.querySelector(this.getAttribute('href')).scrollIntoView({
+                        behavior: 'smooth'
+                    });
+                });
+            });
+        });
+    </script>
+</body>
+</html>
