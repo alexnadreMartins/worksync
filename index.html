@@ -421,17 +421,19 @@
                             body: JSON.stringify(payload)
                         });
 
+                        // Verifica se a resposta foi bem-sucedida
                         if (response.ok) {
-                             const result = await response.json();
-                             if (result.candidates && result.candidates.length > 0 && result.candidates[0].content.parts.length > 0) {
-                                 const text = result.candidates[0].content.parts[0].text;
-                                 hideLoading(outputElement, text);
-                                 return; // Sucesso, sai da função
-                             } else {
-                                 console.error("Resposta da API em formato inesperado:", result);
-                                 hideLoading(outputElement, "Ocorreu um erro ao gerar a resposta. Formato da API inesperado.");
-                                 return;
-                             }
+                            // Await the json() method to correctly parse the response body
+                            const result = await response.json(); 
+                            if (result.candidates && result.candidates.length > 0 && result.candidates[0].content.parts.length > 0) {
+                                const text = result.candidates[0].content.parts[0].text;
+                                hideLoading(outputElement, text);
+                                return; // Sucesso, sai da função
+                            } else {
+                                console.error("Resposta da API em formato inesperado:", result);
+                                hideLoading(outputElement, "Ocorreu um erro ao gerar a resposta. Formato da API inesperado.");
+                                return;
+                            }
                         } else if (response.status === 429) {
                             // Erro de 'Too Many Requests', tenta novamente com backoff
                             retries++;
