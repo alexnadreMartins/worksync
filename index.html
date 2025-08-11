@@ -405,13 +405,23 @@
                 let chatHistory = [];
                 chatHistory.push({ role: "user", parts: [{ text: prompt }] });
                 const payload = { contents: chatHistory };
-                const apiKey = "";
+                
+                // IMPORTANT: PASTE YOUR GOOGLE API KEY HERE
+                // Visite https://aistudio.google.com/app/apikey para obter a sua.
+                // Substitua a string vazia abaixo pela sua chave.
+                const apiKey = "AIzaSyC23DuQ6GphBvIxN3kl1k8ZhI4txciIKZU"; // <--- INSIRA A SUA CHAVE AQUI
+
                 const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-05-20:generateContent?key=${apiKey}`;
                 
                 let response;
                 let retries = 0;
                 const maxRetries = 5;
                 const baseDelay = 1000; // 1 segundo
+
+                if (!apiKey) {
+                    hideLoading(outputElement, "Por favor, insira a sua chave de API no código JavaScript para que a funcionalidade da IA funcione.");
+                    return;
+                }
 
                 while (retries < maxRetries) {
                     try {
@@ -423,17 +433,21 @@
 
                         // Verifica se a resposta foi bem-sucedida
                         if (response.ok) {
-                            // Await the json() method to correctly parse the response body
                             const result = await response.json(); 
                             if (result.candidates && result.candidates.length > 0 && result.candidates[0].content.parts.length > 0) {
                                 const text = result.candidates[0].content.parts[0].text;
                                 hideLoading(outputElement, text);
-                                return; // Sucesso, sai da função
+                                return;
                             } else {
                                 console.error("Resposta da API em formato inesperado:", result);
                                 hideLoading(outputElement, "Ocorreu um erro ao gerar a resposta. Formato da API inesperado.");
                                 return;
                             }
+                        } else if (response.status === 403) {
+                             // Erro 403: Acesso negado. A chave de API pode estar incorreta.
+                            console.error("Erro 403: Acesso negado. Por favor, verifique se a chave de API é válida e está inserida corretamente.");
+                            hideLoading(outputElement, "Ocorreu um erro na conexão com a IA. Por favor, verifique se a sua chave de API está correta.");
+                            return;
                         } else if (response.status === 429) {
                             // Erro de 'Too Many Requests', tenta novamente com backoff
                             retries++;
@@ -450,7 +464,7 @@
                     } catch (error) {
                         console.error("Erro na chamada da API:", error);
                         hideLoading(outputElement, "Ocorreu um erro na conexão. Por favor, tente novamente.");
-                        return; // Erro de rede, sai da função
+                        return;
                     }
                 }
 
